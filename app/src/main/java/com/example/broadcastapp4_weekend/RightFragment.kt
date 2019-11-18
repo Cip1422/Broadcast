@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_right.*
  * A simple [Fragment] subclass.
  */
 class RightFragment : Fragment() {
+    lateinit var right_reciever: BroadcastReceiver
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +39,7 @@ class RightFragment : Fragment() {
     }
     override fun onStart() {
         super.onStart()
-        val top_reciever = object: BroadcastReceiver(){
+         right_reciever = object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 var TheLetter = intent?.getStringExtra("Mailbox")
                 right_text.text = TheLetter
@@ -55,7 +56,17 @@ class RightFragment : Fragment() {
 
         val main = activity as MainActivity?
 
-        main?.registerReceiver(top_reciever, filter)
+        main?.registerReceiver(right_reciever, filter)
+
+    }
+
+
+    override fun onDestroy() {
+        val main = activity as MainActivity?
+
+        main?.unregisterReceiver(right_reciever)
+
+        super.onDestroy()
 
     }
 

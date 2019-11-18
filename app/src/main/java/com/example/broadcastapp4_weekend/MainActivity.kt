@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fragmentright: RightFragment
     private lateinit var fragmenttop: TopFragment
     private lateinit var sys_reciever: BroadcastReceiver
+    private lateinit var mail_reciever: BroadcastReceiver
 
 
 
@@ -58,15 +59,32 @@ class MainActivity : AppCompatActivity() {
 
         openFragments()
 
+        mail_reciever = object: BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                var intent = Intent("Blue's Clues")
+                intent.putExtra("Mailbox", "We just got a letter!")
+                sendBroadcast(intent)
+            }
+
+        }
+
+        val second_filter = IntentFilter("MailTime")
+        registerReceiver(mail_reciever, second_filter)
+
+
         broadcast_bttn.setOnClickListener {
 
 
 
+            var firstintent = Intent("MailTime")
+            firstintent.putExtra("Mailbox", "We just got a letter!")
+            sendBroadcast(firstintent)
 
 
-            var intent = Intent("Blue's Clues")
-            intent.putExtra("Mailbox", "We just got a letter!")
-            sendBroadcast(intent)
+
+            //var intent = Intent("Blue's Clues")
+           // intent.putExtra("Mailbox", "We just got a letter!")
+           // sendBroadcast(intent)
 
             broadcast_bttn.visibility = View.INVISIBLE
             left_image.visibility = View.VISIBLE
@@ -117,6 +135,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy(){
 
        unregisterReceiver(sys_reciever)
+        unregisterReceiver(mail_reciever)
         super.onDestroy()
 
     }

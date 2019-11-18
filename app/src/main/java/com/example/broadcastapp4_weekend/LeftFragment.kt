@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_top.*
 
 class LeftFragment : Fragment() {
 
-
+    lateinit var left_reciever: BroadcastReceiver
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +42,7 @@ class LeftFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val left_reciever = object: BroadcastReceiver(){
+         left_reciever = object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 var TheLetter = intent?.getStringExtra("Mailbox")
                 left_text.text = TheLetter
@@ -63,5 +63,13 @@ class LeftFragment : Fragment() {
 
     }
 
+
+    override fun onDestroy() {
+
+        val main = activity as MainActivity?
+
+        main?.unregisterReceiver(left_reciever)
+        super.onDestroy()
+    }
 
 }

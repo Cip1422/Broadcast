@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_top.*
  */
 class TopFragment : Fragment() {
 
+    lateinit var top_reciever: BroadcastReceiver
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,7 +53,7 @@ class TopFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val top_reciever = object: BroadcastReceiver(){
+         top_reciever = object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 var TheLetter = intent?.getStringExtra("Mailbox")
                 top_text.text = TheLetter
@@ -70,6 +71,15 @@ class TopFragment : Fragment() {
         val main = activity as MainActivity?
 
         main?.registerReceiver(top_reciever, filter)
+
+    }
+
+    override fun onDestroy() {
+
+        val main = activity as MainActivity?
+
+        main?.unregisterReceiver(top_reciever)
+        super.onDestroy()
 
     }
 
